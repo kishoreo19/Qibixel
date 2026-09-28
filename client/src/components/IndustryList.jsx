@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ScrollReveal from './ScrollReveal';
 
 export default function IndustryList({ industries = [] }) {
   const [selectedIndustrySlug, setSelectedIndustrySlug] = useState('saas');
@@ -12,24 +13,66 @@ export default function IndustryList({ industries = [] }) {
   return (
     <section className="section-padding" style={{ backgroundColor: 'var(--card-warm-white)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
       <div className="container">
-        <div style={{ maxWidth: '720px', marginBottom: '3.5rem' }}>
-          <span className="editorial-badge">TAILORED DOMAIN EXPERTISE</span>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.25rem, 4vw, 3.5rem)', color: 'var(--brand-primary)' }}>
-            Deep Industry Focus
-          </h2>
-          <p style={{ marginTop: '0.75rem', fontSize: '1.0625rem' }}>
-            We adapt our search architecture to the distinct regulatory, technical, and commercial realities of your market vertical.
-          </p>
+        <ScrollReveal direction="up">
+          <div style={{ maxWidth: '720px', marginBottom: '3rem' }}>
+            <span className="editorial-badge">TAILORED DOMAIN EXPERTISE</span>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', color: 'var(--brand-primary)' }}>
+              Deep Industry Specialization
+            </h2>
+            <p style={{ marginTop: '0.75rem' }}>
+              We adapt our growth architecture to the distinct regulatory, technical, and commercial realities of your market vertical.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        {/* Mobile Horizontal Pill Scroll Selector (< 992px) */}
+        <div className="mobile-only" style={{ marginBottom: '2rem' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.65rem',
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            paddingBottom: '0.75rem',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}>
+            {industries.map((ind) => {
+              const isSelected = selectedIndustrySlug === ind.slug;
+              return (
+                <button
+                  key={ind.id || ind.slug}
+                  onClick={() => setSelectedIndustrySlug(ind.slug)}
+                  style={{
+                    flex: '0 0 auto',
+                    background: isSelected ? 'var(--brand-primary)' : 'var(--bg-primary)',
+                    color: isSelected ? 'var(--bg-primary)' : 'var(--brand-primary)',
+                    border: isSelected ? '1px solid var(--brand-primary)' : '1px solid var(--border-subtle)',
+                    padding: '0.6rem 1.1rem',
+                    borderRadius: '4px',
+                    fontSize: '0.875rem',
+                    fontWeight: isSelected ? 700 : 500,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    minHeight: '44px',
+                    touchAction: 'manipulation'
+                  }}
+                >
+                  {ind.name}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Interactive Editorial Split Layout */}
+        {/* Desktop & Tablet Layout */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(12, 1fr)',
           gap: '2.5rem'
         }}>
-          {/* Left Vertical List */}
-          <div style={{ gridColumn: 'span 12', '@media (min-width: 992px)': { gridColumn: 'span 5' } }} className="industry-list-col">
+          {/* Left Vertical List (Desktop Only) */}
+          <div style={{ gridColumn: 'span 12' }} className="desktop-only industry-list-col">
             <div style={{ display: 'flex', flexDirection: 'column', borderLeft: '2px solid var(--border-subtle)' }}>
               {industries.map((ind) => {
                 const isSelected = selectedIndustrySlug === ind.slug;
@@ -50,7 +93,8 @@ export default function IndustryList({ industries = [] }) {
                       transition: 'all var(--transition-fast)',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between'
+                      justifyContent: 'space-between',
+                      minHeight: '48px'
                     }}
                   >
                     <span style={{
@@ -73,7 +117,7 @@ export default function IndustryList({ industries = [] }) {
             <div className="animate-fade-in" key={currentIndustry.slug} style={{
               backgroundColor: 'var(--bg-primary)',
               border: '1px solid var(--border-subtle)',
-              padding: '3rem',
+              padding: 'clamp(1.5rem, 5vw, 3rem)',
               borderRadius: '4px',
               height: '100%',
               display: 'flex',
@@ -81,23 +125,23 @@ export default function IndustryList({ industries = [] }) {
               justifyContent: 'space-between'
             }}>
               <div>
-                <span className="editorial-badge">{currentIndustry.name} SEARCH STRATEGY</span>
+                <span className="editorial-badge">{currentIndustry.name} GROWTH STRATEGY</span>
                 
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.25rem', color: 'var(--brand-primary)', marginBottom: '1rem' }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.75rem, 5vw, 2.25rem)', color: 'var(--brand-primary)', marginBottom: '1rem' }}>
                   {currentIndustry.tagline}
                 </h3>
 
-                <p style={{ fontSize: '1.0625rem', color: 'var(--text-charcoal)', lineHeight: 1.75, marginBottom: '2rem' }}>
+                <p style={{ fontSize: '0.9625rem', color: 'var(--text-charcoal)', lineHeight: 1.7, marginBottom: '2rem' }}>
                   {currentIndustry.description}
                 </p>
 
-                <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent-copper)', marginBottom: '1rem' }}>
-                  CORE SEARCH FOCUS AREAS
+                <h4 style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent-copper)', marginBottom: '1rem' }}>
+                  CORE GROWTH FOCUS AREAS
                 </h4>
 
-                <ul style={{ listStyle: 'none', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+                <ul style={{ listStyle: 'none', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '0.85rem', marginBottom: '2rem' }}>
                   {currentIndustry.focusAreas && currentIndustry.focusAreas.map((area, idx) => (
-                    <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.9375rem', color: 'var(--brand-primary)', fontWeight: 500 }}>
+                    <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.875rem', color: 'var(--brand-primary)', fontWeight: 500 }}>
                       <CheckCircle2 size={16} style={{ color: 'var(--accent-copper)', shrink: 0 }} />
                       <span>{area}</span>
                     </li>
@@ -107,23 +151,22 @@ export default function IndustryList({ industries = [] }) {
 
               <div style={{
                 backgroundColor: 'var(--secondary-sage)',
-                padding: '1.25rem 1.75rem',
+                padding: '1.1rem 1.35rem',
                 borderRadius: '2px',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                flexDirection: 'column',
                 gap: '1rem'
-              }}>
+              }} className="industry-impact-box">
                 <div>
-                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--brand-primary)' }}>
+                  <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--brand-primary)' }}>
                     TYPICAL BENCHMARK IMPACT
                   </span>
-                  <div style={{ fontSize: '1.1rem', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--brand-primary)' }}>
+                  <div style={{ fontSize: '1.05rem', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--brand-primary)' }}>
                     {currentIndustry.sampleImpact}
                   </div>
                 </div>
 
-                <Link to="/contact" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.8125rem' }}>
+                <Link to="/contact" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '0.7rem 1.2rem', fontSize: '0.875rem' }}>
                   <span>Discuss {currentIndustry.name} Strategy</span>
                 </Link>
               </div>
@@ -133,8 +176,10 @@ export default function IndustryList({ industries = [] }) {
 
         <style>{`
           @media (min-width: 992px) {
-            .industry-list-col { grid-column: span 5 !important; }
+            .industry-list-col { grid-column: span 5 !important; display: block !important; }
             .industry-detail-col { grid-column: span 7 !important; }
+            .industry-impact-box { flex-direction: row !important; align-items: center !important; justify-content: space-between !important; }
+            .industry-impact-box .btn { width: auto !important; }
           }
         `}</style>
       </div>

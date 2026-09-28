@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://qibixel.com/sitemap.xml

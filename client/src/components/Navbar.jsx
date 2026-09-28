@@ -7,14 +7,40 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
+  // Scroll background listener
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 15);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is active & handle Escape key
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
+  // Close mobile drawer on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
@@ -26,20 +52,24 @@ export default function Navbar() {
     { label: 'Industries', path: '/industries' },
     { label: 'Case Studies', path: '/case-studies' },
     { label: 'Insights', path: '/insights' },
+    { label: 'Contact', path: '/contact' }
   ];
 
   return (
     <header style={{
       position: 'sticky',
       top: 0,
-      zIndex: 100,
-      backgroundColor: scrolled ? 'rgba(244, 240, 232, 0.95)' : 'var(--bg-primary)',
-      backdropFilter: scrolled ? 'blur(8px)' : 'none',
+      zIndex: 1000,
+      backgroundColor: scrolled ? 'rgba(244, 240, 232, 0.96)' : 'var(--bg-primary)',
+      backdropFilter: scrolled ? 'blur(10px)' : 'none',
       borderBottom: scrolled ? '1px solid var(--border-subtle)' : '1px solid transparent',
-      transition: 'all var(--transition-normal)',
+      transition: 'background-color var(--transition-normal), border-color var(--transition-normal)',
       height: 'var(--header-height)',
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      paddingTop: 'var(--safe-top)',
+      paddingLeft: 'var(--safe-left)',
+      paddingRight: 'var(--safe-right)'
     }}>
       <div className="container" style={{
         display: 'flex',
@@ -48,10 +78,20 @@ export default function Navbar() {
         width: '100%'
       }}>
         {/* Brand Logo */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+        <Link
+          to="/"
+          aria-label="QIBIXEL Home"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            minHeight: '44px',
+            touchAction: 'manipulation'
+          }}
+        >
           <span style={{
             fontFamily: 'var(--font-serif)',
-            fontSize: '1.75rem',
+            fontSize: 'clamp(1.5rem, 5vw, 1.85rem)',
             fontWeight: 700,
             letterSpacing: '-0.02em',
             color: 'var(--brand-primary)'
@@ -60,17 +100,17 @@ export default function Navbar() {
           </span>
           <span style={{
             display: 'inline-block',
-            width: '7px',
-            height: '7px',
+            width: '6px',
+            height: '6px',
             borderRadius: '50%',
             backgroundColor: 'var(--accent-copper)',
             marginBottom: '4px'
           }}></span>
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation (Hidden on Mobile) */}
         <nav className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          {navLinks.map((link) => {
+          {navLinks.filter(l => l.label !== 'Contact').map((link) => {
             const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
             return (
               <Link
@@ -98,63 +138,90 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile Hamburger Toggle */}
+        {/* Mobile Touch-Friendly Hamburger Button (Min 44px x 44px) */}
         <button
           className="mobile-only"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle navigation menu"
+          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={mobileMenuOpen}
           style={{
             background: 'none',
             border: 'none',
             color: 'var(--brand-primary)',
             cursor: 'pointer',
-            padding: '0.5rem'
+            minWidth: '44px',
+            minHeight: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 0,
+            touchAction: 'manipulation'
           }}
         >
-          {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Dedicated Mobile Full-Screen Navigation Menu */}
       {mobileMenuOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 'var(--header-height)',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'var(--bg-primary)',
-          zIndex: 99,
-          padding: '2rem 1.5rem',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          borderTop: '1px solid var(--border-subtle)'
-        }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '2rem',
-                  fontWeight: 600,
-                  color: location.pathname === link.path ? 'var(--accent-copper)' : 'var(--brand-primary)',
-                  borderBottom: '1px solid var(--border-subtle)',
-                  paddingBottom: '0.75rem'
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            top: 'calc(var(--header-height) + var(--safe-top))',
+            backgroundColor: 'var(--bg-primary)',
+            zIndex: 999,
+            padding: '1.5rem 1.25rem calc(2rem + var(--safe-bottom))',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            borderTop: '1px solid var(--border-subtle)',
+            overflowY: 'auto',
+            animation: 'fadeIn 250ms cubic-bezier(0.16, 1, 0.3, 1) forwards'
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: 'clamp(1.75rem, 6vw, 2.25rem)',
+                    fontWeight: 600,
+                    color: isActive ? 'var(--accent-copper)' : 'var(--brand-primary)',
+                    borderBottom: '1px solid var(--border-subtle)',
+                    paddingTop: '0.85rem',
+                    paddingBottom: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <span>{link.label}</span>
+                  {isActive && <ArrowUpRight size={22} style={{ color: 'var(--accent-copper)' }} />}
+                </Link>
+              );
+            })}
           </div>
 
-          <div style={{ marginTop: '2rem' }}>
-            <Link to="/contact" className="btn btn-accent" style={{ width: '100%', justifyContent: 'center' }}>
+          <div style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <Link
+              to="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="btn btn-accent"
+              style={{ width: '100%', justifyContent: 'center', fontSize: '1rem', minHeight: '52px' }}
+            >
               <span>Start a Conversation</span>
               <ArrowUpRight size={18} />
             </Link>
+
+            <div style={{ textAlign: 'center', fontSize: '0.8125rem', color: 'var(--text-muted)', paddingTop: '0.5rem' }}>
+              QIBIXEL Organic Search & Web Growth
+            </div>
           </div>
         </div>
       )}
@@ -162,7 +229,7 @@ export default function Navbar() {
       <style>{`
         @media (max-width: 991px) {
           .desktop-only { display: none !important; }
-          .mobile-only { display: block !important; }
+          .mobile-only { display: flex !important; }
         }
         @media (min-width: 992px) {
           .desktop-only { display: flex !important; }

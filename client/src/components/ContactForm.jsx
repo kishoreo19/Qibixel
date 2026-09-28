@@ -10,11 +10,11 @@ export default function ContactForm() {
     website: '',
     industry: 'SaaS',
     budgetRange: '$5k - $10k / mo',
-    seoChallenge: 'Technical SEO & Indexation',
+    seoChallenge: 'Technical SEO & Architecture',
     message: ''
   });
 
-  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error' | 'validation_error'
+  const [status, setStatus] = useState('idle');
   const [fieldErrors, setFieldErrors] = useState({});
   const [serverMessage, setServerMessage] = useState('');
 
@@ -37,7 +37,6 @@ export default function ContactForm() {
       if (response.success) {
         setStatus('success');
         setServerMessage(response.message || "Thanks for reaching out. Your enquiry has been received.");
-        // Reset form
         setFormData({
           name: '',
           workEmail: '',
@@ -45,7 +44,7 @@ export default function ContactForm() {
           website: '',
           industry: 'SaaS',
           budgetRange: '$5k - $10k / mo',
-          seoChallenge: 'Technical SEO & Indexation',
+          seoChallenge: 'Technical SEO & Architecture',
           message: ''
         });
       }
@@ -64,15 +63,16 @@ export default function ContactForm() {
     <div style={{
       backgroundColor: 'var(--card-warm-white)',
       border: '1px solid var(--border-subtle)',
-      padding: '3rem',
+      padding: 'clamp(1.5rem, 5vw, 3rem)',
       borderRadius: '4px',
-      boxShadow: 'var(--shadow-card)'
+      boxShadow: 'var(--shadow-card)',
+      maxWidth: '100%'
     }}>
-      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
+      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.75rem, 5vw, 2.25rem)', color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
         Initiate Strategic Discussion
       </h3>
-      <p style={{ color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '0.9625rem' }}>
-        Complete the search briefing below to schedule a technical SEO evaluation.
+      <p style={{ color: 'var(--text-muted)', marginBottom: '2rem', fontSize: '0.9375rem' }}>
+        Complete the search briefing below to schedule a technical evaluation.
       </p>
 
       {/* Success Notification Banner */}
@@ -81,17 +81,17 @@ export default function ContactForm() {
           backgroundColor: 'var(--secondary-sage)',
           border: '1px solid var(--brand-primary)',
           color: 'var(--brand-primary)',
-          padding: '1.5rem',
+          padding: '1.25rem',
           borderRadius: '4px',
           marginBottom: '2rem',
           display: 'flex',
           alignItems: 'flex-start',
-          gap: '1rem'
+          gap: '0.85rem'
         }}>
-          <CheckCircle size={24} style={{ shrink: 0, marginTop: '2px', color: 'var(--brand-primary)' }} />
+          <CheckCircle size={22} style={{ shrink: 0, marginTop: '2px', color: 'var(--brand-primary)' }} />
           <div>
-            <h4 style={{ fontSize: '1.1rem', margin: 0, color: 'var(--brand-primary)' }}>Submission Confirmed</h4>
-            <p style={{ margin: '0.25rem 0 0', fontSize: '0.9375rem', color: 'var(--brand-primary)' }}>
+            <h4 style={{ fontSize: '1rem', margin: 0, color: 'var(--brand-primary)' }}>Submission Confirmed</h4>
+            <p style={{ margin: '0.25rem 0 0', fontSize: '0.875rem', color: 'var(--brand-primary)' }}>
               {serverMessage}
             </p>
           </div>
@@ -104,7 +104,7 @@ export default function ContactForm() {
           backgroundColor: '#FDF2F2',
           border: '1px solid #F87171',
           color: '#991B1B',
-          padding: '1.25rem',
+          padding: '1.1rem',
           borderRadius: '4px',
           marginBottom: '2rem',
           display: 'flex',
@@ -112,16 +112,16 @@ export default function ContactForm() {
           gap: '0.75rem'
         }}>
           <AlertTriangle size={20} />
-          <span style={{ fontSize: '0.9375rem', fontWeight: 500 }}>
+          <span style={{ fontSize: '0.875rem', fontWeight: 500 }}>
             {serverMessage || "Something went wrong. Please try again."}
           </span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1.5rem' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1.25rem' }}>
         {/* Full Name */}
-        <div style={{ gridColumn: 'span 12', '@media (min-width: 768px)': { gridColumn: 'span 6' } }} className="form-col-6">
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
+        <div style={{ gridColumn: 'span 12' }} className="form-col-6">
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.35rem' }}>
             Full Name *
           </label>
           <input
@@ -134,7 +134,8 @@ export default function ContactForm() {
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
-              fontSize: '0.9375rem',
+              fontSize: '16px', // Prevents iOS Safari auto-zoom
+              minHeight: '48px',
               borderRadius: '2px',
               border: fieldErrors.name ? '1px solid #DC2626' : '1px solid var(--border-subtle)',
               backgroundColor: 'var(--bg-primary)',
@@ -146,8 +147,8 @@ export default function ContactForm() {
         </div>
 
         {/* Work Email */}
-        <div style={{ gridColumn: 'span 12', '@media (min-width: 768px)': { gridColumn: 'span 6' } }} className="form-col-6">
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
+        <div style={{ gridColumn: 'span 12' }} className="form-col-6">
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.35rem' }}>
             Work Email *
           </label>
           <input
@@ -160,7 +161,8 @@ export default function ContactForm() {
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
-              fontSize: '0.9375rem',
+              fontSize: '16px',
+              minHeight: '48px',
               borderRadius: '2px',
               border: fieldErrors.workEmail ? '1px solid #DC2626' : '1px solid var(--border-subtle)',
               backgroundColor: 'var(--bg-primary)',
@@ -172,8 +174,8 @@ export default function ContactForm() {
         </div>
 
         {/* Company */}
-        <div style={{ gridColumn: 'span 12', '@media (min-width: 768px)': { gridColumn: 'span 6' } }} className="form-col-6">
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
+        <div style={{ gridColumn: 'span 12' }} className="form-col-6">
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.35rem' }}>
             Company Name *
           </label>
           <input
@@ -186,7 +188,8 @@ export default function ContactForm() {
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
-              fontSize: '0.9375rem',
+              fontSize: '16px',
+              minHeight: '48px',
               borderRadius: '2px',
               border: fieldErrors.company ? '1px solid #DC2626' : '1px solid var(--border-subtle)',
               backgroundColor: 'var(--bg-primary)',
@@ -198,12 +201,12 @@ export default function ContactForm() {
         </div>
 
         {/* Website URL */}
-        <div style={{ gridColumn: 'span 12', '@media (min-width: 768px)': { gridColumn: 'span 6' } }} className="form-col-6">
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
+        <div style={{ gridColumn: 'span 12' }} className="form-col-6">
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.35rem' }}>
             Website URL
           </label>
           <input
-            type="text"
+            type="url"
             name="website"
             value={formData.website}
             onChange={handleChange}
@@ -211,7 +214,8 @@ export default function ContactForm() {
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
-              fontSize: '0.9375rem',
+              fontSize: '16px',
+              minHeight: '48px',
               borderRadius: '2px',
               border: fieldErrors.website ? '1px solid #DC2626' : '1px solid var(--border-subtle)',
               backgroundColor: 'var(--bg-primary)',
@@ -223,8 +227,8 @@ export default function ContactForm() {
         </div>
 
         {/* Industry */}
-        <div style={{ gridColumn: 'span 12', '@media (min-width: 768px)': { gridColumn: 'span 4' } }} className="form-col-4">
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
+        <div style={{ gridColumn: 'span 12' }} className="form-col-4">
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.35rem' }}>
             Industry Vertical
           </label>
           <select
@@ -234,7 +238,8 @@ export default function ContactForm() {
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
-              fontSize: '0.9375rem',
+              fontSize: '16px',
+              minHeight: '48px',
               borderRadius: '2px',
               border: '1px solid var(--border-subtle)',
               backgroundColor: 'var(--bg-primary)',
@@ -256,8 +261,8 @@ export default function ContactForm() {
         </div>
 
         {/* Budget Range */}
-        <div style={{ gridColumn: 'span 12', '@media (min-width: 768px)': { gridColumn: 'span 4' } }} className="form-col-4">
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
+        <div style={{ gridColumn: 'span 12' }} className="form-col-4">
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.35rem' }}>
             Monthly Budget Target
           </label>
           <select
@@ -267,7 +272,8 @@ export default function ContactForm() {
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
-              fontSize: '0.9375rem',
+              fontSize: '16px',
+              minHeight: '48px',
               borderRadius: '2px',
               border: '1px solid var(--border-subtle)',
               backgroundColor: 'var(--bg-primary)',
@@ -283,9 +289,9 @@ export default function ContactForm() {
         </div>
 
         {/* SEO Challenge */}
-        <div style={{ gridColumn: 'span 12', '@media (min-width: 768px)': { gridColumn: 'span 4' } }} className="form-col-4">
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
-            Primary SEO Priority
+        <div style={{ gridColumn: 'span 12' }} className="form-col-4">
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.35rem' }}>
+            Primary Priority
           </label>
           <select
             name="seoChallenge"
@@ -294,7 +300,8 @@ export default function ContactForm() {
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
-              fontSize: '0.9375rem',
+              fontSize: '16px',
+              minHeight: '48px',
               borderRadius: '2px',
               border: '1px solid var(--border-subtle)',
               backgroundColor: 'var(--bg-primary)',
@@ -302,31 +309,31 @@ export default function ContactForm() {
               outline: 'none'
             }}
           >
-            <option value="Technical SEO & Indexation">Technical SEO & Indexation</option>
+            <option value="Technical SEO & Architecture">Technical SEO & Architecture</option>
             <option value="Search Content Strategy">Search Content Strategy</option>
-            <option value="E-commerce Facet Control">E-commerce Facet Control</option>
-            <option value="Site Migration Preservation">Site Migration Preservation</option>
-            <option value="Authority Link Building & PR">Authority Link Building & PR</option>
-            <option value="Full Organic Turnaround">Full Organic Turnaround</option>
+            <option value="Web Engineering & React Apps">Web Engineering & React Apps</option>
+            <option value="Performance Marketing & PPC">Performance Marketing & PPC</option>
+            <option value="Conversion Optimization (CRO)">Conversion Optimization (CRO)</option>
+            <option value="Full Digital Turnaround">Full Digital Turnaround</option>
           </select>
         </div>
 
         {/* Message */}
         <div style={{ gridColumn: 'span 12' }}>
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>
-            Project & Strategic Requirements *
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', marginBottom: '0.35rem' }}>
+            Project Requirements *
           </label>
           <textarea
             name="message"
             required
-            rows={5}
+            rows={4}
             value={formData.message}
             onChange={handleChange}
-            placeholder="Please outline your current organic search challenges, targets, or platform setup..."
+            placeholder="Please outline your current organic or digital growth goals..."
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
-              fontSize: '0.9375rem',
+              fontSize: '16px',
               borderRadius: '2px',
               border: fieldErrors.message ? '1px solid #DC2626' : '1px solid var(--border-subtle)',
               backgroundColor: 'var(--bg-primary)',
@@ -344,12 +351,12 @@ export default function ContactForm() {
             type="submit"
             disabled={status === 'loading'}
             className="btn btn-primary"
-            style={{ width: '100%', justifyContent: 'center', padding: '1.1rem' }}
+            style={{ width: '100%', justifyContent: 'center', minHeight: '52px', fontSize: '1rem' }}
           >
             {status === 'loading' ? (
               <>
                 <Loader2 size={20} className="animated-dash" />
-                <span>Validating & Transmitting Brief...</span>
+                <span>Transmitting Brief...</span>
               </>
             ) : (
               <>

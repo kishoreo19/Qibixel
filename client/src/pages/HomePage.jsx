@@ -15,8 +15,8 @@ import FAQAccordion from '../components/FAQAccordion';
 
 export default function HomePage() {
   useSEO({
-    title: "Search Higher. Grow Smarter",
-    description: "QIBIXEL helps ambitious businesses turn search visibility into sustainable organic growth through strategy, technical SEO, content, and data.",
+    title: "Search Higher. Build Faster. Grow Smarter",
+    description: "QIBIXEL helps ambitious businesses turn search visibility, web engineering, and performance marketing into compounding organic growth.",
     canonicalUrl: "https://qibixel.com/"
   });
 
@@ -27,57 +27,70 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="section-padding" style={{ backgroundColor: 'var(--bg-primary)', paddingTop: '4rem' }}>
+      {/* Mobile-First Hero Section */}
+      <section className="section-padding" style={{ backgroundColor: 'var(--bg-primary)', paddingTop: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
         <div className="container">
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '4rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(2.5rem, 6vw, 4rem)',
             alignItems: 'center'
           }}>
+            {/* Mobile Composition Content */}
             <div>
               <span className="editorial-badge">{HERO_DATA.label}</span>
               
               <h1 style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(3rem, 6vw, 5rem)',
+                fontSize: 'clamp(2.5rem, 9vw, 5rem)',
                 fontWeight: 600,
                 color: 'var(--brand-primary)',
                 lineHeight: 1.08,
-                marginBottom: '1.5rem',
+                marginBottom: '1.25rem',
                 letterSpacing: '-0.03em'
               }}>
                 {HERO_DATA.headline}
               </h1>
 
               <p style={{
-                fontSize: '1.25rem',
+                fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
                 color: 'var(--text-muted)',
-                lineHeight: 1.75,
-                marginBottom: '2.5rem',
+                lineHeight: 1.7,
+                marginBottom: '2rem',
                 maxWidth: '560px'
               }}>
                 {HERO_DATA.description}
               </p>
 
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', alignItems: 'center' }}>
-                <Link to="/contact" className="btn btn-primary">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', width: '100%' }} className="hero-cta-group">
+                <Link to="/contact" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                   <span>Start a Conversation</span>
                   <ArrowUpRight size={18} />
                 </Link>
-                <Link to="/about" className="btn btn-secondary">
+                <Link to="/about" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center' }}>
                   <span>Explore Our Approach</span>
                 </Link>
               </div>
             </div>
 
             {/* Custom Abstract Search Data Matrix Visual */}
-            <div>
+            <div style={{ width: '100%' }}>
               <HeroVisual />
             </div>
           </div>
         </div>
+
+        <style>{`
+          @media (min-width: 640px) {
+            .hero-cta-group {
+              flex-direction: row !important;
+              width: auto !important;
+            }
+            .hero-cta-group .btn {
+              width: auto !important;
+            }
+          }
+        `}</style>
       </section>
 
       {/* Brand Statement Section */}
@@ -97,12 +110,12 @@ export default function HomePage() {
             flexWrap: 'wrap',
             alignItems: 'flex-end',
             justifyContent: 'space-between',
-            gap: '2rem',
-            marginBottom: '3.5rem'
+            gap: '1.5rem',
+            marginBottom: '3rem'
           }}>
             <div>
               <span className="editorial-badge">PROOF & BENCHMARKS</span>
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.25rem, 4vw, 3.25rem)' }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 6vw, 3.25rem)' }}>
                 Sample Performance Studies
               </h2>
             </div>
@@ -114,7 +127,7 @@ export default function HomePage() {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
             gap: '2rem'
           }}>
             {caseStudies && caseStudies.slice(0, 3).map((study) => (
